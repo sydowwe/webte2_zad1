@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegistrationView from '../views/RegistrationView.vue'
 import AddPerson from '../views/AddPerson.vue';
+import EditPerson from '../views/EditPerson.vue';
+import ViewPerson from '../views/ViewPerson.vue';
+import AllPeople from '../views/AllPeople.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,9 +16,24 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/all-people',
+      name: 'all-people',      
+      component: AllPeople
+    },
+    {
+      path: '/view-person',
+      name: 'view-person',      
+      component: ViewPerson
+    },
+    {
       path: '/add-person',
       name: 'add-person',      
       component: AddPerson
+    },
+    {
+      path: '/edit-person',
+      name: 'edit-person',      
+      component: EditPerson
     },
     {
       path: '/login',

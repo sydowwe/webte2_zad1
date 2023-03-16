@@ -1,12 +1,12 @@
 <template>
   <div>
-      <person-form :isEdit="true" :id="id" class="mb-3" />
-      <placements-table :person_id="id"></placements-table>
+      <person-form :isEdit="true" :id=id class="mb-3" />
+      <placements-table :person_id=id></placements-table>
   </div>
 </template>
 <script>
-  import PersonForm from './PersonForm.vue';
-  import PlacementsTable from './PlacementsTable.vue'
+  import PersonForm from '../components/PersonForm.vue';
+  import PlacementsTable from '../components/PlacementsTable.vue'
   export default {
       components: {
           PersonForm,
@@ -19,7 +19,7 @@
       },
       created() {
           const params = new URLSearchParams(window.location.search);
-          const id = params.get('id');
+          this.id = parseInt(params.get('id'));
           if (this.id == null) {
               console.log('!!!chybajuce ID!!!');
               throw new Error("Param not found");

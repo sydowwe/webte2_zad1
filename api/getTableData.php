@@ -7,12 +7,17 @@ JOIN Olympic_games g ON pl.game_id=g.id
 WHERE pl.placement = 1";
 
 $results = mysqli_query($conn, $sql);
-$data = [];
-if ($results->num_rows > 0) {
-  while ($row = $results->fetch_assoc()) {
+if (!$results) {
+  // Handle query error
+  die("Error executing query: " . mysqli_error($conn));
+}
+
+$data = array();
+if (mysqli_num_rows($results) > 0) {
+  while ($row = mysqli_fetch_assoc($results)) {
     $data[] = $row;
   }
 }
+
 header('Content-Type: application/json');
 echo json_encode($data);
-$conn->close();

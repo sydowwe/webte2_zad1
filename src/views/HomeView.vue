@@ -5,8 +5,7 @@ import MainTable from '../components/MainTable.vue';
 
 <template>
   <main>
-    <span>aaaaaaa</span>
-    <main-table class="mb-3"></main-table>
-    <top10-table></top10-table>
+    <main-table></main-table>
+    <!-- <top10-table></top10-table> -->
   </main>
 </template>

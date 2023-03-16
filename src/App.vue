@@ -11,6 +11,9 @@
                     <router-link class="nav-link" to="/">Domov<span class="sr-only">(current)</span></router-link>
                 </li>
                 <li class="nav-item">
+                    <router-link class="nav-link" to="/all-people">Všetci športovci</router-link>
+                </li>
+                <li class="nav-item">
                     <router-link class="nav-link" to="/add-person">Pridať športovca</router-link>
                 </li>
                 <li class="nav-item">
@@ -23,7 +26,9 @@
         </div>
     </nav>
   </header>
-  <router-view class="container-fluid"></router-view>
+  <div class="container-fluid">
+    <router-view ></router-view>
+  </div>
 </template>
 
 <style scoped>
