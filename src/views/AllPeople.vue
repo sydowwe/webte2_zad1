@@ -1,5 +1,5 @@
 <template>
-    <h1>Pridať športovca</h1>
+    <h1>Všetci naši olympionici</h1>
     <div class="">
         <person-table></person-table>
     </div>

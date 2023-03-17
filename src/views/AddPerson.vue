@@ -1,8 +1,6 @@
 <template>
   <h1>Pridať športovca</h1>
-  <div class="">
-      <person-form :isEdit="false" />
-  </div>
+  <person-form :isEdit="false" />
 </template>
 <script>
   import PersonForm from '../components/PersonForm.vue';

@@ -32,7 +32,17 @@
 </template>
 
 <style scoped>
-
+header {
+  position: sticky;
+  z-index: 100;
+}
+.container-fluid {
+  height: calc(100vh - 58px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 nav a.router-link-exact-active {
   color: var(--color-text);
 }

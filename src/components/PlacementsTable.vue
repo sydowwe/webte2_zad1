@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1>Sportsman Placements</h1>
+    <h3>Umiestnenia</h3>
 
-    <button class="btn btn-success btn-sm" @click="addNew">Pridať</button>
     <table id="sportsmanTable" class="table table-striped table-bordered dt-responsive nowrap no-footer dtr-inline collapsed">
       <thead>
         <tr>
@@ -30,12 +29,37 @@
           </td>
         </tr>
       </tbody>
+      <!-- <button class="btn btn-success" @click="addNew">Pridať umiestnenie</button>
+      <tfoot>
+        
+      </tfoot> -->
     </table>
+
+    <my-modal ref="myModal">    
+      <template v-slot:modal-body v-if="isEdit">
+        <PlacementForm :isEdit="true" :id="id" @saved="hideModal" />
+      </template>
+      <template v-slot:modal-body v-else>
+        <PlacementForm :isEdit="false" @saved="hideModal" />
+      </template>
+
+      <template v-slot:modal-footer>
+        <button type="button" class="btn btn-danger" @click="hideModal">Zavrieť</button>
+        <button type="submit" class="btn btn-success" form="placementForm">Uložiť</button>
+      </template>
+    </my-modal>
   </div>
 </template>
 
 <script>
+import MyModal from './MyModal.vue';
+import PlacementForm from './PlacementForm.vue';
+
 export default {
+  components: {
+    MyModal,
+    PlacementForm,
+  },
   props: {
     person_id: {
       type: Number,
@@ -44,8 +68,10 @@ export default {
   },
   data() {
     return {
+      isEdit: false,
       table: null,
       placements: [],
+      id: 0
     };
   },
   created() {
@@ -62,22 +88,30 @@ export default {
           discipline: placement.discipline,
         });
       });
-      console.log(placements);
-    });
-   
+    });   
+    console.log(self);
   },
   mounted(){ 
     this.table = $("#sportsmanTable").DataTable({
       autoWidth: true
-    });
+    });    
   },
   methods: {
+    showModal(title) {
+      this.$refs.myModal.title = title;
+      this.$refs.myModal.showModal();
+    },
+    hideModal() {
+      this.$refs.myModal.hideModal();
+    },
     addNew() {
-      console.log("add");
+      this.isEdit = false;
+      this.showModal('Pridať umiestnenie');
     },
     editRow(id) {
-      console.log(id);
-      // this.$router.push({ name: "edit-person", params: id });
+      this.isEdit = true;
+      this.id = id;
+      this.showModal('Upraviť umiestnenie');
     },
     deleteRow(id) {
       console.log("delete");

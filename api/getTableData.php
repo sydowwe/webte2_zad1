@@ -12,7 +12,7 @@ if (!$results) {
   die("Error executing query: " . mysqli_error($conn));
 }
 
-$data = array();
+$data = [];
 if (mysqli_num_rows($results) > 0) {
   while ($row = mysqli_fetch_assoc($results)) {
     $data[] = $row;

@@ -21,7 +21,7 @@
       <tbody>       
       </tbody>
     </table>
-    <router-link to="/add-person" class="btn btn-success">Add</router-link>
+    <router-link to="/add-person" class="btn btn-success">Pridať</router-link>
   </div>
 </template>
 
@@ -52,10 +52,10 @@ export default {
           data: "id",
           render: (data) =>
             `<button class="btn btn-danger btn-sm" @click="deleteRow(${data})">Delete</button>`,
-        },
+        }
       ],
       ajax: {
-        url: "../../api/getPeople.php",
+        url: "/api/getPeople.php",
         type: "GET",
         dataSrc: "",
       },

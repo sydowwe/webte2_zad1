@@ -11,7 +11,7 @@
           @input="this.validateTextField('name')"
           :class="{ 'is-invalid': invalidFields.includes('name') }"
           :required="!isEdit"
-          />
+        />
         <div v-if="invalidFields.includes('name')" class="invalid-tooltip">
           Neplatné meno zadávajte len písmená alebo "-","."
         </div>
@@ -24,9 +24,15 @@
           id="surname"
           v-model="formData.surname"
           @input="this.validateTextField('surname')"
-          :class=" formData.surname!=='' ? (invalidFields.includes('surname') ? 'is-invalid' : 'is-valid') : '' "
+          :class="
+            formData.surname !== ''
+              ? invalidFields.includes('surname')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           :required="!isEdit"
-          />
+        />
         <div v-if="invalidFields.includes('surname')" class="invalid-tooltip">
           Neplatné priezvisko zadávajte len písmená alebo "-","."
         </div>
@@ -56,8 +62,11 @@
           @input="this.validateTextField('birthPlace')"
           :class="{ 'is-invalid': invalidFields.includes('birthPlace') }"
           :required="!isEdit"
-          />
-        <div v-if="invalidFields.includes('birthPlace')" class="invalid-tooltip">
+        />
+        <div
+          v-if="invalidFields.includes('birthPlace')"
+          class="invalid-tooltip"
+        >
           Neplatné mesto zadávajte len písmená alebo "-"
         </div>
       </div>
@@ -71,8 +80,11 @@
           @input="this.validateTextField('birthCountry')"
           :class="{ 'is-invalid': invalidFields.includes('birthCountry') }"
           :required="!isEdit"
-          />
-        <div v-if="invalidFields.includes('birthCountry')" class="invalid-tooltip">
+        />
+        <div
+          v-if="invalidFields.includes('birthCountry')"
+          class="invalid-tooltip"
+        >
           Neplatné krajina zadávajte len písmená alebo "-"
         </div>
       </div>
@@ -99,8 +111,11 @@
           v-model="formData.deathPlace"
           @input="this.validateTextField('deathPlace')"
           :class="{ 'is-invalid': invalidFields.includes('deathPlace') }"
-          />
-        <div v-if="invalidFields.includes('deathPlace')" class="invalid-tooltip">
+        />
+        <div
+          v-if="invalidFields.includes('deathPlace')"
+          class="invalid-tooltip"
+        >
           Neplatné mesto zadávajte len písmená alebo "-"
         </div>
       </div>
@@ -113,8 +128,11 @@
           v-model="formData.deathCountry"
           @input="this.validateTextField('deathCountry')"
           :class="{ 'is-invalid': invalidFields.includes('deathCountry') }"
-          />
-        <div v-if="invalidFields.includes('deathCountry')" class="invalid-tooltip">
+        />
+        <div
+          v-if="invalidFields.includes('deathCountry')"
+          class="invalid-tooltip"
+        >
           Neplatné krajina zadávajte len písmená alebo "-"
         </div>
       </div>
@@ -227,27 +245,17 @@ export default {
     },
     handleSubmit() {
       if (this.checkFormValidity()) {
-        if (this.isEdit) {
-          $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: `/editPerson.php?id=${id}`,
-            data: JSON.stringify(this.formData),
-            dataType: "json",
-          }).done((data) => {
-            console.log("User edited!");
-          });
-        } else {
-          $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: `/addPerson.php`,
-            data: JSON.stringify(this.formData),
-            dataType: "json",
-          }).done((data) => {
-            console.log("User added!");
-          });
-        }
+        let myUrl = this.isEdit ? `/editPerson.php?id=${id}` : `/addPerson.php`;
+
+        $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: myUrl,
+          data: JSON.stringify(this.formData),
+          dataType: "json",
+        }).done((data) => {
+          console.log("User edited!");
+        });
       }
     },
     validateDate(fieldId) {
@@ -279,7 +287,7 @@ export default {
           this.invalidFields.splice(index, 1);
         }
       }
-    }
+    },
   },
   watch: {
     isEdit(newVal, oldVal) {

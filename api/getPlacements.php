@@ -7,6 +7,7 @@
     WHERE pl.person_id = ?");
     $stmt->execute([$person_id]);
     $results = $stmt->get_result();
+    $placements = [];
     if (mysqli_num_rows($results) > 0) {
         while ($row = $results->fetch_assoc()) {
             $placements[] = $row;

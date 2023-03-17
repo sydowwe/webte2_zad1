@@ -114,7 +114,7 @@ if (!isset($_GET['action'])) {
         $current = $_SESSION["id"];
         $sql = "INSERT INTO user_data (time_when_logged_in,time_when_logged_out,User_id) VALUES ('$loggedInTime','session','$current')";
         mysqli_query($con, $sql);
-        header("Location: https://site221.webte.fei.stuba.sk/index.php");
+        header("Location: https://site215.webte.fei.stuba.sk/zad1");
       }
     } else {
       $options = [
@@ -136,7 +136,7 @@ if (!isset($_GET['action'])) {
       SET verified=1
       WHERE id='$current'";
       mysqli_query($conn, $sql);
-      header("Location: https://site221.webte.fei.stuba.sk/index.php");
+      header("Location: https://site215.webte.fei.stuba.sk/zad1");
     }
 
 
