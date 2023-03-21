@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="container">
+    <h2 class="text-center">{{ formData.name }} {{ formData.surname }}</h2>
     <form @submit.prevent="handleSubmit">
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="name">Meno</label>
         <input
           type="text"
@@ -9,14 +10,20 @@
           id="name"
           v-model="formData.name"
           @input="this.validateTextField('name')"
-          :class="{ 'is-invalid': invalidFields.includes('name') }"
+          :class="
+            formData.name !== ''
+              ? invalidFields.includes('name')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           :required="!isEdit"
         />
         <div v-if="invalidFields.includes('name')" class="invalid-tooltip">
           Neplatné meno zadávajte len písmená alebo "-","."
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="surname">Priezvisko</label>
         <input
           type="text"
@@ -37,7 +44,7 @@
           Neplatné priezvisko zadávajte len písmená alebo "-","."
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="birthDay">Dátum narodenia</label>
         <input
           type="date"
@@ -45,14 +52,20 @@
           id="birthDay"
           v-model="formData.birthDay"
           @input="validateDate('birthDay')"
-          :class="{ 'is-invalid': invalidFields.includes('birthDay') }"
+          :class="
+            formData.birthDay !== ''
+              ? invalidFields.includes('birthDay')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           :required="!isEdit"
         />
         <div v-if="invalidFields.includes('birthDay')" class="invalid-tooltip">
           Neplatný dátum narodenia skontrolujte si rok
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="birthPlace">Miesto narodenia</label>
         <input
           type="text"
@@ -60,7 +73,13 @@
           id="birthPlace"
           v-model="formData.birthPlace"
           @input="this.validateTextField('birthPlace')"
-          :class="{ 'is-invalid': invalidFields.includes('birthPlace') }"
+          :class="
+            formData.birthPlace !== ''
+              ? invalidFields.includes('birthPlace')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           :required="!isEdit"
         />
         <div
@@ -70,7 +89,7 @@
           Neplatné mesto zadávajte len písmená alebo "-"
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="birthCountry">Krajina narodenia</label>
         <input
           type="text"
@@ -78,7 +97,13 @@
           id="birthCountry"
           v-model="formData.birthCountry"
           @input="this.validateTextField('birthCountry')"
-          :class="{ 'is-invalid': invalidFields.includes('birthCountry') }"
+          :class="
+            formData.birthCountry !== ''
+              ? invalidFields.includes('birthCountry')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           :required="!isEdit"
         />
         <div
@@ -88,7 +113,7 @@
           Neplatné krajina zadávajte len písmená alebo "-"
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="deathDay">Dátum úmrtia</label>
         <input
           type="date"
@@ -96,13 +121,19 @@
           id="deathDay"
           v-model="formData.deathDay"
           @input="this.validateDate('deathDay')"
-          :class="{ 'is-invalid': invalidFields.includes('deathDay') }"
+          :class="
+            formData.deathDay !== ''
+              ? invalidFields.includes('deathDay')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
         />
         <div v-if="invalidFields.includes('deathDay')" class="invalid-tooltip">
           Neplatný dátum úmrtia skontrolujte si rok
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="deathPlace">Miesto úmrtia</label>
         <input
           type="text"
@@ -110,7 +141,13 @@
           id="deathPlace"
           v-model="formData.deathPlace"
           @input="this.validateTextField('deathPlace')"
-          :class="{ 'is-invalid': invalidFields.includes('deathPlace') }"
+          :class="
+            formData.deathPlace !== ''
+              ? invalidFields.includes('deathPlace')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
         />
         <div
           v-if="invalidFields.includes('deathPlace')"
@@ -119,7 +156,7 @@
           Neplatné mesto zadávajte len písmená alebo "-"
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-3">
         <label for="deathCountry">Krajina úmrtia</label>
         <input
           type="text"
@@ -127,7 +164,13 @@
           id="deathCountry"
           v-model="formData.deathCountry"
           @input="this.validateTextField('deathCountry')"
-          :class="{ 'is-invalid': invalidFields.includes('deathCountry') }"
+          :class="
+            formData.deathCountry !== ''
+              ? invalidFields.includes('deathCountry')
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
         />
         <div
           v-if="invalidFields.includes('deathCountry')"
@@ -136,58 +179,38 @@
           Neplatné krajina zadávajte len písmená alebo "-"
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">
-        {{ this.isEdit ? "Uložiť" : "Pridať" }}
-      </button>
-    </form>
-    <div
-      class="modal fade"
-      id="errorModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="errorModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="errorModalLabel">Chyba!</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            {{ errorModalMessage }}
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Zavrieť
-            </button>
-          </div>
-        </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary w-100">
+          {{ this.isEdit ? "Uložiť" : "Pridať" }}
+        </button>
       </div>
-    </div>
+    </form>
+    <my-modal>
+      <template v-slot:modal-body>
+        {{ errorModalMessage }}
+      </template>
+      <template v-slot:modal-footer>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Zavrieť
+        </button>
+      </template>
+    </my-modal>
   </div>
 </template>
 
 <script>
+import MyModal from "./MyModal.vue";
 export default {
+  components: {
+    MyModal,
+  },
   props: {
     isEdit: {
       type: Boolean,
       required: true,
     },
     id: {
-      type: Number,
+      type: String,
       default: null,
     },
   },
@@ -203,7 +226,7 @@ export default {
         deathPlace: "",
         deathCountry: "",
       },
-      invalidFields: [""],
+      invalidFields: [],
       errorModalMessage: "",
     };
   },
@@ -212,7 +235,7 @@ export default {
       $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: `/getPerson.php?id=${this.id}`,
+        url: `/api/getPerson.php?id=${this.id}`,
       }).done((data) => {
         this.formData.name = data.name;
         this.formData.surname = data.surname;
@@ -226,10 +249,15 @@ export default {
     }
   },
   methods: {
+    showModal(title) {
+      this.$refs.myModal.title = title;
+      this.$refs.myModal.showModal();
+    },
     checkFormValidity() {
       const invalidFieldsTexts = [];
       if (this.invalidFields.length > 0) {
         this.invalidFields.forEach((fieldId) => {
+          console.log(fieldId);
           const label = this.$el.querySelector(
             `label[for=${fieldId}]`
           ).textContent;
@@ -238,20 +266,44 @@ export default {
         this.errorModalMessage = `Nasledujúce polia sú neplatné: ${invalidFieldsTexts.join(
           ", "
         )}. Prosím, opravte ich.`;
-        $("#errorModal").modal("show");
+        this.showModal("Chyba!");
         return false;
       }
       return true;
     },
     handleSubmit() {
       if (this.checkFormValidity()) {
-        let myUrl = this.isEdit ? `/editPerson.php?id=${id}` : `/addPerson.php`;
+        const {
+          name,
+          surname,
+          birthDay,
+          birthPlace,
+          birthCountry,
+          deathDay,
+          deathPlace,
+          deathCountry,
+        } = this.formData;
 
+        // Create a new object with only the desired fields
+        const formDataToSend = {
+          name,
+          surname,
+          birthDay,
+          birthPlace,
+          birthCountry,
+        };
+        if (deathDay) formDataToSend.deathDay = deathDay;
+        if (deathPlace) formDataToSend.deathPlace = deathPlace;
+        if (deathCountry) formDataToSend.deathCountry = deathCountry;
+        let myUrl = this.isEdit
+          ? `/api/editPerson.php?id=${id}`
+          : `/api/addPerson.php`;
+        console.log(JSON.stringify(formDataToSend));
         $.ajax({
           type: "POST",
           contentType: "application/json",
           url: myUrl,
-          data: JSON.stringify(this.formData),
+          data: JSON.stringify(formDataToSend),
           dataType: "json",
         }).done((data) => {
           console.log("User edited!");
@@ -305,3 +357,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.container {
+  max-width: 500px;
+}
+</style>

@@ -1,16 +1,7 @@
+<script setup>
+import PersonForm from "../components/PersonForm.vue";
+</script>
 <template>
-  <h1>Pridať športovca</h1>
+  <h2>Pridať športovca</h2>
   <person-form :isEdit="false" />
 </template>
-<script>
-  import PersonForm from '../components/PersonForm.vue';
-  export default {
-      components: {
-          PersonForm
-      }
-  }
-</script>
-
-<style>
-/* Your custom styles */
-</style>

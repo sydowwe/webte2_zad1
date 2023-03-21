@@ -2,7 +2,7 @@
   <div>
     <table
       id="mainTable"
-      class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+      class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer"
     >
       <thead>
         <tr>
@@ -11,12 +11,11 @@
           <th id="typ">Typ</th>
           <th>Rok</th>
           <th>Mesto</th>
-          <th>Disciplína</th>          
+          <th>Disciplína</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
-    <router-link to="/add-person" class="btn btn-primary">Add</router-link>
   </div>
 </template>
 <script>
@@ -27,27 +26,28 @@ export default {
     };
   },
   mounted() {
-    const table = $("#mainTable").DataTable({
+    this.table = $("#mainTable").DataTable({
+      responsive: true,
+      columnDefs: [{ className: "text-center", targets: "_all" }],
       columns: [
         { data: "name" },
         { data: "surname" },
         { data: "type" },
         { data: "year" },
         { data: "city" },
-        { data: "discipline" }
+        { data: "discipline" },
       ],
       ajax: {
-        url: "../../api/getTableData.php",
+        url: "/api/getTableData.php",
         type: "GET",
         dataSrc: "",
       },
-      rowCallback: (row, data)=> {
-        $(row).on("click", ()=>{
-          this.$router.push({ name: "view-person", query: { id: data.id } });
+      rowCallback: (row, data) => {
+        $(row).on("click", () => {
+          this.$router.push({ name: "view-person", params: { id: data.id } });
         });
       },
     });
-    this.table = table;
-  }  
+  },
 };
 </script>

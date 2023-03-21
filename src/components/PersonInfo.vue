@@ -163,11 +163,7 @@
   
   <script>
   export default {
-    props: {
-      isEdit: {
-        type: Boolean,
-        required: true,
-      },
+    props: {     
       id: {
         type: Number,
         default: null,
@@ -184,9 +180,7 @@
           deathDay: "",
           deathPlace: "",
           deathCountry: "",
-        },
-        invalidFields: [""],
-        errorModalMessage: "",
+        }
       };
     },
     created() {
@@ -206,95 +200,7 @@
           this.formData.deathCountry = data.death_country;
         });
       }
-    },
-    methods: {
-      checkFormValidity() {
-        const invalidFieldsTexts = [];
-        if (this.invalidFields.length > 0) {
-          this.invalidFields.forEach((fieldId) => {
-            const label = this.$el.querySelector(
-              `label[for=${fieldId}]`
-            ).textContent;
-            invalidFieldsTexts.push(label);
-          });
-          this.errorModalMessage = `Nasledujúce polia sú neplatné: ${invalidFieldsTexts.join(
-            ", "
-          )}. Prosím, opravte ich.`;
-          $("#errorModal").modal("show");
-          return false;
-        }
-        return true;
-      },
-      handleSubmit() {
-        if (this.checkFormValidity()) {
-          if (this.isEdit) {
-            $.ajax({
-              type: "POST",
-              contentType: "application/json",
-              url: `/editPerson.php?id=${id}`,
-              data: JSON.stringify(this.formData),
-              dataType: "json",
-            }).done((data) => {
-              console.log("User edited!");
-            });
-          } else {
-            $.ajax({
-              type: "POST",
-              contentType: "application/json",
-              url: `/addPerson.php`,
-              data: JSON.stringify(this.formData),
-              dataType: "json",
-            }).done((data) => {
-              console.log("User added!");
-            });
-          }
-        }
-      },
-      validateDate(fieldId) {
-        const fieldDate = new Date(this.formData[fieldId]);
-        if (
-          fieldDate.getFullYear() < 1800 ||
-          fieldDate.getFullYear() > new Date().getFullYear()
-        ) {
-          if (!this.invalidFields.includes(fieldId)) {
-            this.invalidFields.push(fieldId);
-          }
-        } else {
-          const index = this.invalidFields.indexOf(fieldId);
-          if (index > -1) {
-            this.invalidFields.splice(index, 1);
-          }
-        }
-      },
-      validateTextField(fieldId) {
-        const fieldValue = this.formData[fieldId];
-        const regex = /^[A-Za-z]+([ -.]?[A-Za-z]+)*$/;
-        if (!regex.test(fieldValue)) {
-          if (!this.invalidFields.includes(fieldId)) {
-            this.invalidFields.push(fieldId);
-          }
-        } else {
-          const index = this.invalidFields.indexOf(fieldId);
-          if (index !== -1) {
-            this.invalidFields.splice(index, 1);
-          }
-        }
-      }
-    },
-    watch: {
-      isEdit(newVal, oldVal) {
-        if (newVal === false) {
-          this.formData.name = "";
-          this.formData.surname = "";
-          this.formData.birthDay = "";
-          this.formData.birthPlace = "";
-          this.formData.birthCountry = "";
-          this.formData.deathDay = "";
-          this.formData.deathPlace = "";
-          this.formData.deathCountry = "";
-        }
-      },
-    },
+    }  
   };
   </script>
   

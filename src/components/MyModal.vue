@@ -6,12 +6,11 @@
           <h5 class="modal-title">{{ title }}</h5>
           <button
             type="button"
-            class="close"
+            class="close btn btn-close"
             data-dismiss="modal"
             aria-label="Close"
             @click="hideModal"
           >
-            <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">

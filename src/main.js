@@ -4,6 +4,7 @@ import $ from "jquery";
 import "bootstrap";
 import "datatables.net";
 import "datatables.net-bs5";
+import 'select2';
 
 import App from './App.vue'
 import router from './router'

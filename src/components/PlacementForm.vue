@@ -4,7 +4,7 @@
       <label for="placement">Umiestnenie</label>
       <input
         type="number"
-        class="form-control"
+        class="form-control form-control-sm"
         id="placement"
         v-model="formData.placement"
         min="0"
@@ -13,13 +13,13 @@
     </div>
     <div class="form-group">
       <label for="games">Olympíjské hry</label>
-      <input class="form-control" id="games" v-model="formData.games">
+      <select class="form-control" id="games" v-model="formData.gamesId"></select>
     </div>
     <div class="form-group">
       <label for="discipline">Disciplína</label>
       <input
         type="text"
-        class="form-control"
+        class="form-control form-control-sm"
         id="discipline"
         v-model="formData.discipline"
       />
@@ -35,7 +35,7 @@ export default {
       required: true,
     },
     id: {
-      type: Number,
+      type: String,
       default: null,
     },
   },
@@ -44,13 +44,12 @@ export default {
       formData: {
         personId: this.id,
         placement: 0,
-        gamesID: 0,
-        games: "",
+        gamesId: 0,
         discipline: "",
       },
     };
   },
-  created() {
+  created() {    
     if (this.isEdit) {
       $.ajax({
         type: "GET",
@@ -58,11 +57,34 @@ export default {
         url: `/api/getPlacementById.php?id=${this.id}`,
       }).done((data) => {
         this.formData.placement = data.placement;
-        // this.formData.gamesID = data.gamesID;
         this.formData.games = data.games;
+        this.formData.gamesId = data.gamesId;
         this.formData.discipline = data.discipline;
       });
     }
+  },
+  mounted() {
+    console.log(this.$refs.myModal);
+    $("#games").select2({
+      dropdownParent: this.$refs.myModal,
+      width: '100%',
+      placeholder: 'Select a game',
+      allowClear: true,
+      ajax: {
+        url: "/api/getGames.php",
+        dataType: "json",
+        processResults: data => {
+          return {
+            results: $.map(data, item => {
+              return {
+                text: item.games,
+                id: item.gamesId,
+              };
+            }),
+          };
+        },
+      }
+    });
   },
   methods: {
     handleSubmit() {

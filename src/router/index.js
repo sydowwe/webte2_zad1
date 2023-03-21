@@ -21,7 +21,7 @@ const router = createRouter({
       component: AllPeople
     },
     {
-      path: '/view-person',
+      path: '/view-person/:id',
       name: 'view-person',      
       component: ViewPerson
     },
@@ -31,7 +31,7 @@ const router = createRouter({
       component: AddPerson
     },
     {
-      path: '/edit-person',
+      path: '/edit-person/:id',
       name: 'edit-person',      
       component: EditPerson
     },

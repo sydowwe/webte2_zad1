@@ -13,6 +13,7 @@
     "datatables.net-bs5": "^1.13.4",
     "jquery": "^3.6.4",
     "pinia": "^2.0.32",
+    "select2": "^4.1.0-rc.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

@@ -1,41 +1,24 @@
 <template>
   <div>
-    <h3>Umiestnenia</h3>
-
-    <table id="sportsmanTable" class="table table-striped table-bordered dt-responsive nowrap no-footer dtr-inline collapsed">
-      <thead>
-        <tr>
-          <th>Umiestnenie</th>
-          <th>Hry</th>
-          <th>Disciplína</th>
-          <th>Upraviť</th>
-          <th>Odstrániť</th>
+    <h3 class="text-center">Umiestnenia</h3>    
+    <table
+    id="placementsTable"
+    class="table table-striped table-bordered dt-responsive nowrap no-footer"
+    >
+    <thead>
+      <tr>
+        <th>Umiestnenie</th>
+        <th>Hry</th>
+        <th>Disciplína</th>
+        <th><button class="btn btn-sm btn-success" @click="addNew">Add</button></th>        
+        <th><button class="btn btn-sm btn-warning" @click="deleteAll">Delete All</button></th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="placement in placements">
-          <td>{{ placement.placement }}</td>
-          <td>{{ placement.games }}</td>
-          <td>{{ placement.discipline }}</td>
-          <td>
-            <button class="btn btn-primary btn-sm" @click="editRow(placement.id)">
-              Upraviť
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-danger btn-sm" @click="removeRow(placement.id)">
-              Odstrániť
-            </button>
-          </td>
-        </tr>
-      </tbody>
-      <!-- <button class="btn btn-success" @click="addNew">Pridať umiestnenie</button>
-      <tfoot>
-        
-      </tfoot> -->
+      <tbody>       
+      </tbody>      
     </table>
 
-    <my-modal ref="myModal">    
+    <my-modal ref="myModal">
       <template v-slot:modal-body v-if="isEdit">
         <PlacementForm :isEdit="true" :id="id" @saved="hideModal" />
       </template>
@@ -44,16 +27,20 @@
       </template>
 
       <template v-slot:modal-footer>
-        <button type="button" class="btn btn-danger" @click="hideModal">Zavrieť</button>
-        <button type="submit" class="btn btn-success" form="placementForm">Uložiť</button>
+        <button type="button" class="btn btn-danger" @click="hideModal">
+          Zavrieť
+        </button>
+        <button type="submit" class="btn btn-success" form="placementForm">
+          Uložiť
+        </button>
       </template>
     </my-modal>
   </div>
 </template>
 
 <script>
-import MyModal from './MyModal.vue';
-import PlacementForm from './PlacementForm.vue';
+import MyModal from "./MyModal.vue";
+import PlacementForm from "./PlacementForm.vue";
 
 export default {
   components: {
@@ -62,40 +49,69 @@ export default {
   },
   props: {
     person_id: {
-      type: Number,
+      type: String,
       default: null,
     },
   },
   data() {
     return {
       isEdit: false,
-      table: null,
-      placements: [],
-      id: 0
+      id: "",
+      dataTable: null,
     };
   },
-  created() {
-    $.ajax({
-      type: "GET",
-      contentType: "application/json",
-      url: `/api/getPlacements.php?person_id=${this.person_id}`,
-    }).done((placements) => {
-      placements.forEach((placement) => {
-        this.placements.push({
-          id: placement.id,
-          placement: placement.placement,
-          games: placement.games,
-          discipline: placement.discipline,
+  mounted() {
+    const vue = this;
+    this.dataTable = $("#placementsTable").DataTable({
+      responsive: true,
+      rowId: "id",
+      columnDefs: [
+            { targets: [3,4], orderable: false },
+            { className: "text-center", targets: "_all" }
+        ],
+      ajax: {
+        url: `/api/getPlacements.php?person_id=${this.person_id}`,
+        type: "GET",
+        dataSrc: ""
+      },
+      columns: [
+        { data: "placement" },
+        { data: "games" },
+        { data: "discipline" },
+        {
+          data: "id",
+          render: (data) =>
+            `<button data-id="${data}" class="editBtn btn btn-primary btn-sm">Edit</button>`,
+        },
+        {
+          data: "id",
+          render: (data) =>
+            `<button data-id="${data}" class="deleteBtn btn btn-danger btn-sm">Delete</button>`,
+        },
+      ],
+      rowCallback: (row, data) => {
+        $(row).on("click", (e) => {
+          if (e.target.nodeName !== "BUTTON") {
+            vue.$router.push({ name: "view-person", params: { id: data.id } });
+          }
         });
+      },
+    });
+    $("#placementsTable").on("click", "button.editBtn", function () {
+      const id = $(this).attr("data-id");
+      vue.isEdit = true;
+      vue.id = id;
+      vue.showModal("Upraviť umiestnenie");
+    });
+    $("#placementsTable").on("click", "button.deleteBtn", function () {
+      const id = $(this).attr("data-id");
+      vue.dataTable.row(`#${id}`).remove().draw();
+      $.ajax({
+        url: `/api/deletePlacement.php?id=${id}`,
+        type: "POST",
       });
-    });   
-    console.log(self);
-  },
-  mounted(){ 
-    this.table = $("#sportsmanTable").DataTable({
-      autoWidth: true
-    });    
-  },
+    });
+  }, 
   methods: {
     showModal(title) {
       this.$refs.myModal.title = title;
@@ -106,21 +122,15 @@ export default {
     },
     addNew() {
       this.isEdit = false;
-      this.showModal('Pridať umiestnenie');
+      this.showModal("Pridať umiestnenie");
     },
-    editRow(id) {
-      this.isEdit = true;
-      this.id = id;
-      this.showModal('Upraviť umiestnenie');
-    },
-    deleteRow(id) {
-      console.log("delete");
-      this.table.row(`[data-id="${id}"]`).remove().draw();
-      // $.ajax({
-      //   url: `/deletePerson.php?id=${id}`,
-      //   type: "GET",
-      // });
-    },
+    deleteAll(){
+      this.dataTable.clear().draw();
+      $.ajax({
+        url: `/api/deleteAllPlacements.php?person_id=${this.person_id}`,
+        type: "POST",
+      });
+    }
   },
 };
 </script>
