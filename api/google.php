@@ -1,5 +1,5 @@
 <?php
-require '../config.php';
+require './config/config.php';
 
 if (empty($_SESSION["id"])) {
   header("Location: /zad1/");
@@ -97,7 +97,7 @@ if (isset($_GET['code'])) {
   die();
 }
 
-$loggedInTime = date('m/d/Y h:i:s a', time());
+$loggedInTime = date('Y-m-d H:i:s', time());
 
 // If there is a user ID in the session
 // the user is already logged in
@@ -105,43 +105,39 @@ if (!isset($_GET['action'])) {
   if (!empty($_SESSION['user_id'])) {
     $user = $_SESSION['email'];
     $password = $_SESSION['user_id'];
+
     $result = mysqli_query($conn, "SELECT * FROM User WHERE email = '$user'");
     $row = mysqli_fetch_assoc($result);
+
     if (mysqli_num_rows($result) > 0) {
       if (password_verify($password, $row['password'])) {
         $_SESSION["id"] = $row["id"];
         $_SESSION["email"] = $row["email"];
-        $current = $_SESSION["id"];
-        $sql = "INSERT INTO user_data (time_when_logged_in,time_when_logged_out,User_id) VALUES ('$loggedInTime','session','$current')";
-        mysqli_query($con, $sql);
+
+        $loggedUser = $_SESSION["id"];
+        $sql = "INSERT INTO User_log (user_id,login_time) VALUES ('$loggedUser','$loggedInTime')";
+        mysqli_query($conn, $sql);
         header("Location: https://site215.webte.fei.stuba.sk/zad1");
       }
     } else {
       $options = [
-        'cost' => 12,
+        'cost' => 13,
       ];
       $password = password_hash($password, PASSWORD_BCRYPT, $options);
 
-      $sql = "INSERT INTO User (name,surname,username,password,email,role,method) VALUES ('none','none','none','$password','$user','User','Google')";
-      $r=mysqli_query($con, $sql);
-      while ($row = mysqli_fetch_assoc($r)) {
+      $sql = "INSERT INTO User (password,email,method) VALUES ('$password','$user','Google')";
+      $results=mysqli_query($conn, $sql);
+      while ($row = mysqli_fetch_assoc($results)) {
         $_SESSION["id"] = $row["id"];
         $_SESSION["email"] = $row["email"];
       }
 
       $current = $_SESSION["id"];
-      $sql = "INSERT INTO user_data (time_when_logged_in,time_when_logged_out,User_id) VALUES ('$loggedInTime','session','$current')";
+      $sql = "INSERT INTO User_log (user_id,login_time) VALUES ('$current','$loggedInTime')";
       mysqli_query($conn, $sql);
-      $sql = "UPDATE User
-      SET verified=1
-      WHERE id='$current'";
-      mysqli_query($conn, $sql);
-      header("Location: https://site215.webte.fei.stuba.sk/zad1");
+      
+      header("Location: https://site215.webte.fei.stuba.sk/zad1");    
     }
-
-
-
-
   }
   die();
 }

@@ -43,19 +43,74 @@
         Continue with Google
       </a>
     </form>
+    <my-modal ref="myModal">
+      <template v-slot:modal-body v-if="!isError">
+        <verify-qr-code :personData="body" ref="verifyQrCode"></verify-qr-code>
+      </template>
+      <template v-slot:modal-body v-else>
+        {{ errorMessage }}
+      </template>
+      <template v-slot:modal-footer>
+        <button type="button" class="btn btn-danger" @click="hideModal">
+          Zavrieť
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          v-if="!isError"
+          @click="sumbitQR"
+        >
+          Odoslať
+        </button>
+      </template>
+    </my-modal>
   </div>
 </template>
 <script>
+import MyModal from "../components/MyModal.vue";
+import VerifyQrCode from "@/components/VerifyQrCode.vue";
 export default {
+  components: {
+    MyModal,
+    VerifyQrCode,
+  },
   data() {
     return {
       login: "",
       password: "",
+      isError: false,
+      errorMessage: "",
+      body: null,
     };
   },
   created() {},
   methods: {
-    handleSubmit() {},
+    handleSubmit() {
+      $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/api/login.php",
+        data: JSON.stringify(this.formData),
+        dataType: "json",
+      })
+        .done((data) => {
+          this.isError = data.error;
+          if (!this.isError) {
+            this.body = data.body;
+            this.$refs.myModal.showModal();
+          } else {
+            this.errorMessage = data.body;
+            this.$refs.myModal.showModal();
+          }
+        })
+        .fail((error) => {
+          console.log(error);
+        });
+    },
+    sumbitQR() {
+      const verifyQrCode = this.$refs.verifyQrCode;
+      verifyQrCode.handleSubmit();
+    },
   },
 };
 </script>
