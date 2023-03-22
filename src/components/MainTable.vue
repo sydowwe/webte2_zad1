@@ -2,7 +2,7 @@
   <div>
     <table
       id="mainTable"
-      class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer"
+      class="table table-striped table-responsive table-bordered no-footer"
     >
       <thead>
         <tr>
@@ -27,6 +27,7 @@ export default {
   },
   mounted() {
     this.table = $("#mainTable").DataTable({
+      scrollX: true,
       responsive: true,
       columnDefs: [{ className: "text-center", targets: "_all" }],
       columns: [

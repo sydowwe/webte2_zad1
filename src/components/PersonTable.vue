@@ -19,10 +19,8 @@
               >Pridať</router-link
             >
           </th>
-          <th>
-            <button class="btn btn-sm btn-warning" @click="deleteAll">
-              Delete All
-            </button>
+          <th>            
+            Delete 
           </th>
         </tr>
       </thead>
@@ -41,6 +39,7 @@ export default {
   mounted() {
     const self = this;
     this.dataTable = $("#personTable").DataTable({
+      scrollX: true,
       responsive: true,
       rowId: "id",
       columnDefs: [
@@ -92,6 +91,6 @@ export default {
         type: "POST",
       });
     });
-  },
+  }  
 };
 </script>

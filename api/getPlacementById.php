@@ -1,7 +1,7 @@
 <?php
 require './config/config.php';
 $id = $_GET['id'];
-$stmt = $conn->prepare("SELECT pl.placement, CONCAT(g.type, ' ', g.city, ', ', g.country, ' ', g.year) AS games, g.id as gamesId, pl.discipline FROM Placements pl
+$stmt = $conn->prepare("SELECT pl.placement, CONCAT(g.type, ' ', g.city, ', ', g.country, ' ', g.year) AS games, g.id as gameId, pl.discipline FROM Placements pl
 JOIN Olympic_games g ON pl.game_id=g.id 
 WHERE pl.id = ?");
 $stmt->execute([$id]);

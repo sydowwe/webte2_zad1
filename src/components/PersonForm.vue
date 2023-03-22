@@ -17,7 +17,7 @@
                 : 'is-valid'
               : ''
           "
-          :required="!isEdit"
+          data-required
         />
         <div v-if="invalidFields.includes('name')" class="invalid-tooltip">
           Neplatné meno zadávajte len písmená alebo "-","."
@@ -38,7 +38,7 @@
                 : 'is-valid'
               : ''
           "
-          :required="!isEdit"
+          data-required
         />
         <div v-if="invalidFields.includes('surname')" class="invalid-tooltip">
           Neplatné priezvisko zadávajte len písmená alebo "-","."
@@ -59,7 +59,7 @@
                 : 'is-valid'
               : ''
           "
-          :required="!isEdit"
+          data-required
         />
         <div v-if="invalidFields.includes('birthDay')" class="invalid-tooltip">
           Neplatný dátum narodenia skontrolujte si rok
@@ -80,7 +80,7 @@
                 : 'is-valid'
               : ''
           "
-          :required="!isEdit"
+          data-required
         />
         <div
           v-if="invalidFields.includes('birthPlace')"
@@ -104,7 +104,7 @@
                 : 'is-valid'
               : ''
           "
-          :required="!isEdit"
+          data-required
         />
         <div
           v-if="invalidFields.includes('birthCountry')"
@@ -113,6 +113,7 @@
           Neplatné krajina zadávajte len písmená alebo "-"
         </div>
       </div>
+
       <div class="form-group mb-2">
         <label for="deathDay">Dátum úmrtia</label>
         <input
@@ -185,12 +186,12 @@
         </button>
       </div>
     </form>
-    <my-modal>
+    <my-modal ref="myModal">
       <template v-slot:modal-body>
         {{ errorModalMessage }}
       </template>
       <template v-slot:modal-footer>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-danger" @click="hideModal">
           Zavrieť
         </button>
       </template>
@@ -242,9 +243,9 @@ export default {
         this.formData.birthDay = data.birth_day;
         this.formData.birthPlace = data.birth_place;
         this.formData.birthCountry = data.birth_country;
-        this.formData.deathDay = data.death_day;
-        this.formData.deathPlace = data.death_place;
-        this.formData.deathCountry = data.death_country;
+        this.formData.deathDay = data.death_day ?? "";
+        this.formData.deathPlace = data.death_place ?? "";
+        this.formData.deathCountry = data.death_country ?? "";
       });
     }
   },
@@ -253,8 +254,23 @@ export default {
       this.$refs.myModal.title = title;
       this.$refs.myModal.showModal();
     },
+    hideModal(){
+      this.$refs.myModal.hideModal();
+    },
     checkFormValidity() {
       const invalidFieldsTexts = [];
+      let hasInvalidFields = false;
+
+      this.$el.querySelectorAll("[data-required]").forEach((field) => {
+        if (!field.value.trim()) {
+          const label = this.$el.querySelector(
+            `label[for=${field.id}]`
+          ).textContent;
+          invalidFieldsTexts.push(label);
+          hasInvalidFields = true;
+        }
+      });
+
       if (this.invalidFields.length > 0) {
         this.invalidFields.forEach((fieldId) => {
           console.log(fieldId);
@@ -262,7 +278,11 @@ export default {
             `label[for=${fieldId}]`
           ).textContent;
           invalidFieldsTexts.push(label);
+          hasInvalidFields = true;
         });
+      }
+
+      if (hasInvalidFields) {
         this.errorModalMessage = `Nasledujúce polia sú neplatné: ${invalidFieldsTexts.join(
           ", "
         )}. Prosím, opravte ich.`;
@@ -273,48 +293,37 @@ export default {
     },
     handleSubmit() {
       if (this.checkFormValidity()) {
-        const {
-          name,
-          surname,
-          birthDay,
-          birthPlace,
-          birthCountry,
-          deathDay,
-          deathPlace,
-          deathCountry,
-        } = this.formData;
-
-        // Create a new object with only the desired fields
-        const formDataToSend = {
-          name,
-          surname,
-          birthDay,
-          birthPlace,
-          birthCountry,
-        };
-        if (deathDay) formDataToSend.deathDay = deathDay;
-        if (deathPlace) formDataToSend.deathPlace = deathPlace;
-        if (deathCountry) formDataToSend.deathCountry = deathCountry;
         let myUrl = this.isEdit
-          ? `/api/editPerson.php?id=${id}`
+          ? `/api/editPerson.php?id=${this.id}`
           : `/api/addPerson.php`;
-        console.log(JSON.stringify(formDataToSend));
         $.ajax({
           type: "POST",
           contentType: "application/json",
           url: myUrl,
-          data: JSON.stringify(formDataToSend),
+          data: JSON.stringify(this.formData),
           dataType: "json",
-        }).done((data) => {
-          console.log("User edited!");
-        });
+        })
+          .done((id) => {
+            if (id == "edit") {
+              this.errorModalMessage = `Používateľ bol upravený`;
+              this.showModal("Hotovo");
+            } else {
+              this.$router.push({ name: "edit-person", params: { id: id } });
+            }
+          })
+          .fail((error) => {
+            console.log(error);
+            this.errorModalMessage = `Používateľ už existuje`;
+            this.showModal("Chyba!");
+          });
       }
     },
     validateDate(fieldId) {
       const fieldDate = new Date(this.formData[fieldId]);
       if (
         fieldDate.getFullYear() < 1800 ||
-        fieldDate.getFullYear() > new Date().getFullYear()
+        fieldDate > new Date() ||
+        new Date($("#deathDay").val()) < new Date($("#birthDay").val())
       ) {
         if (!this.invalidFields.includes(fieldId)) {
           this.invalidFields.push(fieldId);
@@ -360,5 +369,14 @@ export default {
 <style scoped>
 .container {
   max-width: 500px;
+}
+.form-check-label {
+  font-size: 1.2em; /* Increase label font size */
+  margin-left: 10px; /* Add some space between label and checkbox */
+}
+
+.form-check-input[type="checkbox"] {
+  width: 1.5em; /* Increase checkbox width */
+  height: 1.5em; /* Increase checkbox height */
 }
 </style>

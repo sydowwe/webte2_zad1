@@ -1,41 +1,31 @@
 @import './base.css';
 
-/* a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-} */
-
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(284, 61%, 41%, 0.33);
+    background-color: hsla(284, 61%, 41%, 0.499);
   }
 }
 .dataTables_filter input {
   padding: 0.5em;
-  border: 1px solid #ccc;
+  border: 2px solid #818181;
   border-radius: 3px;
 }
 
-.dataTables_paginate .paginate_button {
-  padding: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  background-color: #fff;
-  color: #666;
-  margin-right: 0.5em;
-}
-
-.dataTables_paginate .paginate_button.current {
-  background-color: #007bff;
-  color: #fff;
-}
 thead {
   background-color: #333333;
   color: #ffffff;
 }
-thead .sorting:before, 
-thead .sorting_asc:before {
-  color: #ffffff;
+table{
+  background-color: aliceblue !important;
+  width: 100% !important;
+}
+
+.dataTables_length select{
+  border: 2px solid #818181;
+  border-radius: 3px;
+}
+@media  only screen and (max-width: 800px) {
+  .dataTables_length{  
+    margin-bottom: 10px;
+  }
 }

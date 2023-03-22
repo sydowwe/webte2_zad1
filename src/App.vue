@@ -36,11 +36,11 @@
               >Registrácia</router-link
             >
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link" to="/logout" hidden
               >Odhlásiť sa</router-link
             >
-          </li>
+          </li> -->
         </ul>
       </div>
     </nav>
@@ -52,6 +52,7 @@
 
 <style scoped>
 .container-fluid {
+  min-height: 100vh;
   height: 100%;
   padding-top: 88px;
   display: flex;

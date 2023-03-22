@@ -2,7 +2,7 @@
   <div>
     <table
       id="top10Table"
-      class="table table-striped table-bordered dt-responsive nowrap no-footer"
+      class="table table-striped table-responsive table-bordered no-footer"
     >
       <thead>
         <tr>
@@ -20,6 +20,7 @@ export default {
   mounted() {
     this.$nextTick(function () {
       $("#top10Table").DataTable({
+        scrollX: true,
         responsive: true,
         paging: false,
         info: false,

@@ -1,6 +1,8 @@
 <template>
-  <person-form :isEdit="true" :id="id" class="mb-3" />
-  <placements-table :person_id="id"></placements-table>
+  <div class="col-12 col-sm-6">
+    <person-form :isEdit="true" :id="id" class="mb-3" />
+    <placements-table :person_id="id"></placements-table>
+  </div>
 </template>
 <script>
 import PersonForm from "../components/PersonForm.vue";
