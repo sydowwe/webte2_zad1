@@ -33,7 +33,7 @@ export default {
           { data: "years" },
         ],
         ajax: {
-          url: "/api/getTop10.php",
+          url: "/zad1/api/getTop10.php",
           type: "GET",
           dataSrc: "",
         },

@@ -38,7 +38,7 @@ export default {
       $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/api/verifyQR.php",
+        url: "/zad1/api/verifyQR.php",
         data: JSON.stringify(this.personData),
         dataType: "json",
       })

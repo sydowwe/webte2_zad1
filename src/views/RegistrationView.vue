@@ -141,7 +141,7 @@ export default {
         $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: "/api/register.php",
+          url: "/zad1/api/register.php",
           data: JSON.stringify(this.formData),
           dataType: "json",
         })

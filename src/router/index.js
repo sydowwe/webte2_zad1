@@ -8,7 +8,7 @@ import ViewPerson from '../views/ViewPerson.vue';
 import AllPeople from '../views/AllPeople.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/zad1/'),
   routes: [
     {
       path: '/',

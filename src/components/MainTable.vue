@@ -39,7 +39,7 @@ export default {
         { data: "discipline" },
       ],
       ajax: {
-        url: "/api/getTableData.php",
+        url: "/zad1/api/getTableData.php",
         type: "GET",
         dataSrc: "",
       },

@@ -93,7 +93,7 @@ export default {
         { className: "text-center", targets: "_all" },
       ],
       ajax: {
-        url: `/api/getPlacements.php?person_id=${this.person_id}`,
+        url: `/zad1/api/getPlacements.php?person_id=${this.person_id}`,
         type: "GET",
         dataSrc: "",
       },
@@ -127,7 +127,7 @@ export default {
       $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: '/api/addAdminLog.php',
+          url: '/zad1/api/addAdminLog.php',
           data: JSON.stringify({
             "operation": "delete",
             "table": "People",
@@ -140,7 +140,7 @@ export default {
         })
       vue.dataTable.row(`#${id}`).remove().draw();
       $.ajax({
-        url: `/api/deletePlacement.php?id=${id}`,
+        url: `/zad1/api/deletePlacement.php?id=${id}`,
         type: "POST",
       });
     });
@@ -165,7 +165,7 @@ export default {
       $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: '/api/addAdminLog.php',
+          url: '/zad1/api/addAdminLog.php',
           data: JSON.stringify({
             "operation": "delete",
             "table": "People",
@@ -177,7 +177,7 @@ export default {
           console.log('zapisane');      
         })
       $.ajax({
-        url: `/api/deleteAllPlacements.php?person_id=${this.person_id}`,
+        url: `/zad1/api/deleteAllPlacements.php?person_id=${this.person_id}`,
         type: "POST",
       });
     },

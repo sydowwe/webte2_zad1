@@ -49,7 +49,7 @@ export default {
     $.ajax({
       type: "GET",
       contentType: "application/json",
-      url: `/api/getPerson.php?id=${this.id}`,
+      url: `/zad1/api/getPerson.php?id=${this.id}`,
       dataType: "json",
     }).done((data) => {
       console.log(data);

@@ -66,7 +66,7 @@ export default {
       $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/api/checkLogin.php",        
+        url: "/zad1/api/checkLogin.php",        
         dataType: "json",
       }).done((data) => {
         this.isLoggedIn = data ? true : false;

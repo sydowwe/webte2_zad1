@@ -236,7 +236,7 @@ export default {
       $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: `/api/getPerson.php?id=${this.id}`,
+        url: `/zad1/api/getPerson.php?id=${this.id}`,
       }).done((data) => {
         this.formData.name = data.name;
         this.formData.surname = data.surname;
@@ -294,8 +294,8 @@ export default {
     handleSubmit() {
       if (this.checkFormValidity()) {
         let myUrl = this.isEdit
-          ? `/api/editPerson.php?id=${this.id}`
-          : `/api/addPerson.php`;
+          ? `/zad1/api/editPerson.php?id=${this.id}`
+          : `/zad1/api/addPerson.php`;
         $.ajax({
           type: "POST",
           contentType: "application/json",
@@ -321,7 +321,7 @@ export default {
           $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: '/api/addAdminLog.php',
+          url: '/zad1/api/addAdminLog.php',
           data: JSON.stringify({
             "operation": this.isEdit ? "edit" : "add",
             "table": "People",

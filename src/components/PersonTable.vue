@@ -67,7 +67,7 @@ export default {
         },
       ],
       ajax: {
-        url: "/api/getPeople.php",
+        url: "/zad1/api/getPeople.php",
         type: "GET",
         dataSrc: "",
       },
@@ -88,7 +88,7 @@ export default {
       $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: '/api/addAdminLog.php',
+          url: '/zad1/api/addAdminLog.php',
           data: JSON.stringify({
             "operation": "delete",
             "table": "People",
@@ -101,7 +101,7 @@ export default {
         })
       self.dataTable.row(`#${id}`).remove().draw();
       $.ajax({
-        url: `/api/deletePerson.php?id=${id}`,
+        url: `/zad1/api/deletePerson.php?id=${id}`,
         type: "POST",
       });
     });

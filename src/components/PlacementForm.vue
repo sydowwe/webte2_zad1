@@ -68,7 +68,7 @@ export default {
       $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: `/api/getPlacementById.php?id=${this.id}`,
+        url: `/zad1/api/getPlacementById.php?id=${this.id}`,
       }).done((data) => {
         this.formData.placement = data.placement;
         this.formData.games = data.games;
@@ -84,7 +84,7 @@ export default {
       placeholder: "Select a game",
       allowClear: true,
       ajax: {
-        url: "/api/getGames.php",
+        url: "/zad1/api/getGames.php",
         dataType: "json",
         processResults: (data) => {
           return {
@@ -105,8 +105,8 @@ export default {
   methods: {
     handleSubmit() {
       let myUrl = this.isEdit
-        ? `/api/editPlacement.php?id=${this.id}`
-        : `/api/addPlacement.php`;
+        ? `/zad1/api/editPlacement.php?id=${this.id}`
+        : `/zad1/api/addPlacement.php`;
       this.formData.personId = this.personId;
       $.ajax({
         type: "POST",
@@ -131,7 +131,7 @@ export default {
         $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: '/api/addAdminLog.php',
+          url: '/zad1/api/addAdminLog.php',
           data: JSON.stringify({
             "operation": this.isEdit ? "edit" : "add",
             "table": "Placements",

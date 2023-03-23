@@ -70,7 +70,7 @@
 </template>
 <script>
 import MyModal from "../components/MyModal.vue";
-import VerifyQrCode from "@/components/VerifyQrCode.vue";
+import VerifyQrCode from "../components/VerifyQrCode.vue";
 export default {
   components: {
     MyModal,
@@ -123,7 +123,7 @@ export default {
       $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/api/login.php",
+        url: "/zad1/api/login.php",
         data: JSON.stringify(this.formData),
         dataType: "json",
       })

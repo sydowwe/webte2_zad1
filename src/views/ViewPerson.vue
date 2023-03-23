@@ -6,7 +6,7 @@
 </template>
 <script>
 import PlacementsTable from "../components/PlacementsTable.vue";
-import PersonInfo from "@/components/PersonInfo.vue";
+import PersonInfo from "../components/PersonInfo.vue";
 export default {
   components: {
     PlacementsTable,
