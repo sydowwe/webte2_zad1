@@ -8,7 +8,8 @@
           type="text"
           id="login"
           class="form-control form-control-lg"
-          v-model="login"
+          v-model="formData.login"
+          data-required
         />
       </div>
 
@@ -18,7 +19,8 @@
           type="password"
           id="password"
           class="form-control form-control-lg"
-          v-model="password"
+          v-model="formData.password"
+          data-required
         />
       </div>
 
@@ -44,8 +46,8 @@
       </a>
     </form>
     <my-modal ref="myModal">
-      <template v-slot:modal-body v-if="!isError">
-        <verify-qr-code :personData="body" ref="verifyQrCode"></verify-qr-code>
+      <template v-slot:modal-body v-if="!isError && body">
+        <verify-qr-code :personData="body" ref="verifyQrCode" :modalRef="modalRef"></verify-qr-code>
       </template>
       <template v-slot:modal-body v-else>
         {{ errorMessage }}
@@ -76,15 +78,47 @@ export default {
   },
   data() {
     return {
-      login: "",
-      password: "",
+      modalRef: null,
+      formData: {
+        login: "",
+        password: "",
+      },
       isError: false,
       errorMessage: "",
-      body: null,
+      body: null
     };
   },
-  created() {},
+  mounted() {
+    this.modalRef = this.$refs.myModal;
+  },
   methods: {
+    checkFormValidity() {
+      const invalidFieldsTexts = [];
+      this.$el.querySelectorAll("[data-required]").forEach((field) => {
+        if (!field.value.trim()) {
+          const label = this.$el.querySelector(
+            `label[for=${field.id}]`
+          ).textContent;
+          invalidFieldsTexts.push(label);
+          this.isError = true;
+        }
+      });     
+      if (this.isError) {
+        this.errorMessage = `Prosím, vyplňte nasledujúce polia: ${invalidFieldsTexts.join(
+          ", "
+        )}`;
+        this.showModal("Chyba!");
+        return false;
+      }
+      return true;
+    },
+    showModal(title) {
+      this.$refs.myModal.title = title;
+      this.$refs.myModal.showModal();
+    },
+    hideModal(){
+      this.$refs.myModal.hideModal();
+    },
     handleSubmit() {
       $.ajax({
         type: "POST",
@@ -97,10 +131,10 @@ export default {
           this.isError = data.error;
           if (!this.isError) {
             this.body = data.body;
-            this.$refs.myModal.showModal();
+            this.showModal("Google authenticator");
           } else {
             this.errorMessage = data.body;
-            this.$refs.myModal.showModal();
+            this.showModal("Chyba!");
           }
         })
         .fail((error) => {

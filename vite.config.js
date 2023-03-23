@@ -9,13 +9,18 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }, 
+  },
   server: {
     proxy: {
       '/api': {
-        target: 'https://site215.webte.fei.stuba.sk/zad1', 
+        target: 'https://site215.webte.fei.stuba.sk/zad1',
         changeOrigin: true
       }
     }
-  }  
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'src',
+    minify: true,    
+  }
 });

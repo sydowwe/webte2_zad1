@@ -11,6 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $formData->username;
   $email  = $formData->email;
   $password = password_hash($formData->password, PASSWORD_BCRYPT, ['cost' => 13]);
+  
+  if (strstr($email, '@gmail.com')) {
+    header("Location: https://site215.webte.fei.stuba.sk/zad1/api/google.php?action=login");
+  }    
+  
 
   $g2fa = new PHPGangsta_GoogleAuthenticator();
   $user_secret = $g2fa->createSecret();

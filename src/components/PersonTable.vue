@@ -80,11 +80,25 @@ export default {
       },
     });
     $("#personTable").on("click", "button.editBtn", function () {
-      const id = $(this).attr("data-id");
+      const id = $(this).attr("data-id");      
       self.$router.push({ name: "edit-person", params: { id: id } });
     });
     $("#personTable").on("click", "button.deleteBtn", function () {
       const id = $(this).attr("data-id");
+      $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: '/api/addAdminLog.php',
+          data: JSON.stringify({
+            "operation": "delete",
+            "table": "People",
+            "recordId": id 
+          }),
+          dataType: "json",
+        })
+        .done(data => {    
+          console.log('zapisane');      
+        })
       self.dataTable.row(`#${id}`).remove().draw();
       $.ajax({
         url: `/api/deletePerson.php?id=${id}`,

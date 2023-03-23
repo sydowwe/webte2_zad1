@@ -1,14 +1,16 @@
 <template>
   <div class="col-12 col-sm-6">
-    <h2 id="name">meno</h2>
-    <placements-table :person_id="id"></placements-table>
+    <person-info :id="id"></person-info>
+    <placements-table :person_id="id" :canEdit="false"></placements-table>
   </div>
 </template>
 <script>
 import PlacementsTable from "../components/PlacementsTable.vue";
+import PersonInfo from "@/components/PersonInfo.vue";
 export default {
   components: {
     PlacementsTable,
+    PersonInfo
   },
   data() {
     return {
@@ -16,9 +18,8 @@ export default {
     };
   },
   created() {
-    const params = new URLSearchParams(window.location.search);
-    this.id = parseInt(params.get("id"));
-    if (this.id == null) {
+    this.id = this.$route.params.id;
+    if (this.id == -1) {
       console.log("!!!chybajuce ID!!!");
       throw new Error("Param not found");
     }

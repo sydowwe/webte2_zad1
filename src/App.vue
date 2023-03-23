@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <span class="navbar-brand">Olympic Games</span>
+      <span class="navbar-brand">{{ email }}</span>
       <button
         class="navbar-toggler"
         type="button"
@@ -19,28 +19,26 @@
             <router-link class="nav-link" to="/">Domov</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/all-people"
+            <router-link class="nav-link" to="/all-people" v-if="isLoggedIn"
               >Všetci športovci</router-link
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/add-person"
+            <router-link class="nav-link" to="/add-person" v-if="isLoggedIn"
               >Pridať športovca</router-link
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/login">Prihlásenie</router-link>
+            <router-link class="nav-link" to="/login" v-if="!isLoggedIn">Prihlásenie</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/register"
+            <router-link class="nav-link" to="/register" v-if="!isLoggedIn"
               >Registrácia</router-link
             >
           </li>
-          <!-- <li class="nav-item">
-            <router-link class="nav-link" to="/logout" hidden
-              >Odhlásiť sa</router-link
-            >
-          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="/api/logout.php" v-if="isLoggedIn">Odhlásiť sa</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -49,6 +47,43 @@
     <router-view></router-view>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      isLoggedIn: false,
+      email:''
+    };
+  },
+  created(){
+    this.fetchIfLogged();
+  },   
+  activated() {
+    this.fetchIfLogged();
+  },
+  methods: {
+    fetchIfLogged() {
+      $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/api/checkLogin.php",        
+        dataType: "json",
+      }).done((data) => {
+        this.isLoggedIn = data ? true : false;
+        this.email = data ? data : 'Neprihlásený';
+      });
+    },
+  },
+  watch: {
+    isLoggedIn() {
+      this.$forceUpdate();
+    },
+    email() {
+      this.$forceUpdate();
+    },
+  },
+};
+</script>
 
 <style scoped>
 .container-fluid {

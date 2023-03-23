@@ -127,6 +127,21 @@ export default {
         .fail((error) => {
           alert("Chyba!");
         });
+
+        $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: '/api/addAdminLog.php',
+          data: JSON.stringify({
+            "operation": this.isEdit ? "edit" : "add",
+            "table": "Placements",
+            "recordId": this.id 
+          }),
+          dataType: "json",
+        })
+        .done(data => {    
+          console.log('zapisane');      
+        })
     },
   },
   watch: {

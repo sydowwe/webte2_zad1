@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h4 class="text-center mb-2">Zadajte QR kód z authentificator aplikácie</h4>
+    <h4 class="text-center mb-2">Zadajte QR kód z aplikácie</h4>
     <form @submit.prevent="handleSubmit" class="d-flex flex-column">
       <div class="form-group mb-2">
         <label class="form-label" for="code">QR kód</label>
@@ -15,16 +15,16 @@
   </div>
 </template>
 <script>
-import MyModal from "../components/MyModal.vue";
 export default {
-  components: {
-    MyModal,
-  },
   props: {
     personData: {
       type: Object,
       required: true,
-    },    
+    },
+    modalRef: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
@@ -35,26 +35,25 @@ export default {
   methods: {
     handleSubmit() {
       this.personData.code = this.code;
-      console.log(this.personData);
-    //   $.ajax({
-    //     type: "POST",
-    //     contentType: "application/json",
-    //     url: "/api/verifyQR.php",
-    //     data: JSON.stringify(this.personData),
-    //     dataType: "json",
-    //   })
-    //     .done((data) => {
-    //       this.isError = data.error;
-    //       if (!this.isError) {  
-    //           this.$router.push({ name: "home"});      
-    //       } else {
-    //         this.errorMessage = data.body;
-    //         this.$refs.myModal.showModal();
-    //       }
-    //     })
-    //     .fail((error) => {
-    //       console.log(error);
-    //     });
+      $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/api/verifyQR.php",
+        data: JSON.stringify(this.personData),
+        dataType: "json",
+      })
+        .done((data) => {
+          this.isError = data.error;
+          if (!this.isError) {
+            this.modalRef.hideModal();
+            this.$router.push({ name: "home" });
+          } else {
+            alert("Nesprávny QR kód!");
+          }
+        })
+        .fail((error) => {
+          console.log(error);
+        });
     },
   },
 };

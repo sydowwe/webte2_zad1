@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="text-center">{{ formData.name }} {{ formData.surname }}</h2>
+    <h3 class="text-center">{{ formData.name }} {{ formData.surname }}</h3>
     <form @submit.prevent="handleSubmit">
       <div class="form-group mb-2">
         <label for="name">Meno</label>
@@ -316,6 +316,22 @@ export default {
             this.errorModalMessage = `Používateľ už existuje`;
             this.showModal("Chyba!");
           });
+
+
+          $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: '/api/addAdminLog.php',
+          data: JSON.stringify({
+            "operation": this.isEdit ? "edit" : "add",
+            "table": "People",
+            "recordId": this.id 
+          }),
+          dataType: "json",
+        })
+        .done(data => {    
+          console.log(data);      
+        })
       }
     },
     validateDate(fieldId) {

@@ -11,10 +11,10 @@
           <th>Hry</th>
           <th>Disciplína</th>
           <th>
-            <button class="btn btn-sm btn-success" @click="addNew">Add</button>
+            <button class="btn btn-sm btn-success" @click="addNew" v-if="canEdit">Add</button>
           </th>
           <th>
-            <button class="btn btn-sm btn-warning" @click="deleteAll">
+            <button class="btn btn-sm btn-warning" @click="deleteAll" v-if="canEdit">
               Delete All
             </button>
           </th>
@@ -68,6 +68,10 @@ export default {
       type: String,
       default: null,
     },
+    canEdit:{
+      type: Boolean,
+      required: true,
+    }
   },
   data() {
     return {
@@ -108,7 +112,10 @@ export default {
             `<button data-id="${data}" class="deleteBtn btn btn-danger btn-sm">Delete</button>`,
         },
       ],
-    });
+    });   
+    this.dataTable.columns([3, 4]).visible(this.canEdit);
+      
+    
     $("#placementsTable").on("click", "button.editBtn", function () {
       const id = $(this).attr("data-id");
       vue.isEdit = true;
@@ -117,6 +124,20 @@ export default {
     });
     $("#placementsTable").on("click", "button.deleteBtn", function () {
       const id = $(this).attr("data-id");
+      $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: '/api/addAdminLog.php',
+          data: JSON.stringify({
+            "operation": "delete",
+            "table": "People",
+            "recordId": id
+          }),
+          dataType: "json",
+        })
+        .done(data => {    
+          console.log('zapisane');      
+        })
       vue.dataTable.row(`#${id}`).remove().draw();
       $.ajax({
         url: `/api/deletePlacement.php?id=${id}`,
@@ -141,6 +162,20 @@ export default {
     },
     deleteAll() {
       this.dataTable.clear().draw();
+      $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: '/api/addAdminLog.php',
+          data: JSON.stringify({
+            "operation": "delete",
+            "table": "People",
+            "recordId": "all"
+          }),
+          dataType: "json",
+        })
+        .done(data => {    
+          console.log('zapisane');      
+        })
       $.ajax({
         url: `/api/deleteAllPlacements.php?person_id=${this.person_id}`,
         type: "POST",

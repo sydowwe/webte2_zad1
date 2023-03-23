@@ -1,16 +1,18 @@
 <?php
-require '../config.php';
-$u=$_SESSION['email'];
-$c=$_SESSION['id'];
+require './config/config.php';
+session_start();
 if (empty($_SESSION["id"])) {
-    header("Location: https://site221.webte.fei.stuba.sk/index.php");
+    header("Location: https://site215.webte.fei.stuba.sk/zad1/api/login.php");
 }
-$sql = "UPDATE User
-SET verified='0'
-WHERE id='$c'";
-    mysqli_query($con, $sql);
-$_SESSION = [];
-session_unset();
-session_destroy();
+$email=$_SESSION['email'];
+$id=$_SESSION['id'];
 
-header("Location: https://site221.webte.fei.stuba.sk/index.php?en=1&username=$u&cid=$c");
+$loggedOutTime = date('Y-m-d H:i:s');
+$sql = "UPDATE User_log SET logout_time = '$loggedOutTime' WHERE user_id='$id'";
+mysqli_query($conn, $sql);
+
+if (session_status() === PHP_SESSION_ACTIVE) {
+    session_unset();
+    session_destroy();
+}
+header("Location: https://site215.webte.fei.stuba.sk/zad1");
